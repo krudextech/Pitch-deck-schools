@@ -1,0 +1,1259 @@
+const fs = require('fs');
+const path = require('path');
+const { chromium } = require('C:/projects/Krudex port/Krudex-Tech/node_modules/@playwright/test');
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Krudex Global Student — Institutional Pricing & Solution Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  :root {
+    --bg-dark: #07090E;
+    --bg-card: #0F1420;
+    --bg-card-alt: #141B2D;
+    --border: #1E293B;
+    --border-light: #2C394F;
+    --primary: #2563EB;
+    --primary-bright: #3B82F6;
+    --primary-glow: rgba(37, 99, 235, 0.22);
+    --accent: #E2E8F0;
+    --accent-gold: #F59E0B;
+    --success: #10B981;
+    --text-white: #FAFAFA;
+    --text-dim: #94A3B8;
+    --text-muted: #64748B;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    position: relative;
+    padding: 13mm 14mm;
+    background: radial-gradient(circle at 85% 6%, #172554 0%, #07090E 52%), radial-gradient(circle at 10% 92%, #0F172A 0%, #07090E 50%);
+    overflow: hidden;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Header bar */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3.5mm;
+    margin-bottom: 4mm;
+  }
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-img {
+    height: 27px;
+    width: auto;
+    object-fit: contain;
+  }
+  .brand-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 7.5pt;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: #CBD5E1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 7.8pt;
+    color: var(--text-dim);
+    line-height: 1.35;
+  }
+  .header-meta strong {
+    color: var(--text-white);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    display: block;
+  }
+
+  /* Page 1 Hero */
+  .hero-block {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: 6mm;
+    align-items: center;
+    margin-bottom: 4.5mm;
+    background: linear-gradient(135deg, rgba(20, 27, 45, 0.85) 0%, rgba(15, 20, 32, 0.65) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 5mm 6mm;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-block::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 140px;
+    height: 140px;
+    background: var(--primary-glow);
+    filter: blur(40px);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 7.5pt;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: #93C5FD;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2mm;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #3B82F6;
+  }
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: 24pt;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin-bottom: 2.5mm;
+    color: #FFFFFF;
+  }
+  .hero-title span {
+    font-style: italic;
+    color: #93C5FD;
+  }
+  .hero-lead {
+    font-size: 8.6pt;
+    line-height: 1.5;
+    color: var(--text-dim);
+    margin-bottom: 3.5mm;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 2.5mm;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-num {
+    font-family: var(--font-serif);
+    font-size: 15pt;
+    font-weight: 400;
+    color: var(--text-white);
+    line-height: 1.1;
+  }
+  .stat-lbl {
+    font-size: 6.8pt;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .hero-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .hero-phone-img {
+    width: 100%;
+    max-width: 155px;
+    height: auto;
+    border-radius: 18px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  /* Section Headings */
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3mm;
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 15pt;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+  }
+  .section-sub {
+    font-size: 7.8pt;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  /* 4 Pillars Grid (15 features) */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.5mm;
+    margin-bottom: 4mm;
+  }
+  .pillar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3.5mm 4mm;
+    position: relative;
+  }
+  .pillar-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2.5mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .pillar-icon-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(37, 99, 235, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-bright);
+  }
+  .pillar-icon-box svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+  .pillar-name {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #F1F5F9;
+    letter-spacing: -0.01em;
+  }
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 8pt;
+    line-height: 1.35;
+  }
+  .f-bullet {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--primary-bright);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .f-text strong {
+    color: #F8FAFC;
+    font-weight: 600;
+  }
+  .f-text span {
+    color: var(--text-dim);
+  }
+
+  /* Roles Bar */
+  .roles-bar {
+    background: linear-gradient(90deg, #0F1420 0%, #141B2D 100%);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 3.5mm 4.5mm;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4mm;
+    margin-bottom: 3.5mm;
+  }
+  .role-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .role-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #F8FAFC;
+    font-family: var(--font-mono);
+    font-size: 7pt;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.04em;
+  }
+  .role-desc {
+    font-size: 7.8pt;
+    line-height: 1.35;
+    color: var(--text-dim);
+  }
+  .role-desc strong {
+    color: #FFFFFF;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  /* Value pillars footer */
+  .trust-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5mm;
+    padding-top: 2.5mm;
+    border-top: 1px solid var(--border);
+  }
+  .trust-item {
+    font-size: 7.5pt;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .trust-item svg {
+    width: 12px;
+    height: 12px;
+    color: var(--success);
+    flex-shrink: 0;
+  }
+
+  /* Page Footer */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7.5pt;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 2.5mm;
+    margin-top: 3mm;
+  }
+  .footer-left {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* PAGE 2 STYLING: PRICING */
+  .pricing-hero {
+    text-align: center;
+    margin-bottom: 4.5mm;
+    margin-bottom: 3.2mm;
+  }
+  .pricing-hero h2 {
+    font-family: var(--font-serif);
+    font-size: 23pt;
+    font-size: 22pt;
+    font-weight: 400;
+    margin-bottom: 1.5mm;
+    margin-bottom: 1.2mm;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+  }
+  .pricing-hero p {
+    font-size: 8.6pt;
+    font-size: 8.4pt;
+    color: var(--text-dim);
+    max-width: 530px;
+    margin: 0 auto;
+    line-height: 1.45;
+    line-height: 1.4;
+  }
+
+  /* Primary Subscription Plans (Student & Staff) */
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4.5mm;
+    margin-bottom: 3.5mm;
+    margin-bottom: 2.8mm;
+  }
+  .plan-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4.8mm 5.8mm;
+    padding: 4.2mm 5.5mm;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .plan-card:first-child {
+    border-color: rgba(59, 130, 246, 0.45);
+    background: linear-gradient(180deg, rgba(23, 37, 84, 0.3) 0%, rgba(15, 20, 32, 0.95) 100%);
+  }
+  .plan-card:last-child {
+    border-color: rgba(56, 189, 248, 0.35);
+    background: linear-gradient(180deg, rgba(14, 30, 55, 0.25) 0%, rgba(15, 20, 32, 0.95) 100%);
+  }
+  .plan-top {
+    margin-bottom: 2mm;
+    margin-bottom: 1.5mm;
+  }
+  .plan-title {
+    font-family: var(--font-serif);
+    font-size: 15pt;
+    font-size: 14.5pt;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-bottom: 1mm;
+    margin-bottom: 0.8mm;
+    letter-spacing: -0.01em;
+  }
+  .plan-sub {
+    font-size: 7.2pt;
+    color: var(--text-dim);
+    line-height: 1.4;
+    line-height: 1.35;
+  }
+
+  /* Admin Suite Free Highlight Banner */
+  .admin-included-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, rgba(30, 58, 138, 0.32) 0%, rgba(15, 23, 42, 0.6) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 8px;
+    padding: 2.6mm 4mm;
+    margin-bottom: 3.8mm;
+    padding: 2.2mm 4mm;
+    margin-bottom: 3mm;
+  }
+  .aib-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 6.5pt;
+    font-weight: 700;
+    color: #93C5FD;
+    background: rgba(59, 130, 246, 0.25);
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    padding: 2.5px 8px;
+    padding: 2.2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+  }
+  .aib-content {
+    font-size: 7.2pt;
+    font-size: 7.1pt;
+    line-height: 1.35;
+    color: var(--text-dim);
+  }
+  .aib-content strong {
+    color: #FFFFFF;
+    font-size: 7.5pt;
+    font-size: 7.4pt;
+    margin-right: 3px;
+  }
+    font-size: 8pt;
+    color: var(--text-dim);
+    line-height: 1.35;
+  }
+  .plan-price-wrap {
+    margin: 3mm 0;
+    padding: 3mm 0;
+    margin: 2.5mm 0;
+    padding: 2.5mm 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .currency {
+    font-size: 16pt;
+    font-size: 15pt;
+    font-weight: 700;
+    color: var(--text-white);
+  }
+  .amount {
+    font-family: var(--font-sans);
+    font-size: 28pt;
+    font-size: 26pt;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+  }
+  .period {
+    font-size: 8.5pt;
+    font-size: 8pt;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 2px;
+  }
+  .gst-tag {
+    color: #34D399;
+    font-weight: 700;
+    margin-left: 2px;
+  }
+  .plan-features {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+    margin-bottom: 2mm;
+    gap: 1.8mm;
+    margin-bottom: 1mm;
+  }
+  .p-feat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 8.2pt;
+    font-size: 8pt;
+    line-height: 1.35;
+    color: #E2E8F0;
+  }
+  .p-feat-item svg {
+    width: 14px;
+    height: 14px;
+    width: 13px;
+    height: 13px;
+    color: #38BDF8;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Mobile App Deployment Tier (One-time Setup) */
+  .app-setup-section {
+    background: linear-gradient(135deg, rgba(20, 27, 45, 0.9) 0%, rgba(13, 17, 28, 0.95) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4.5mm 5.5mm;
+    margin-bottom: 4.5mm;
+    padding: 3.5mm 5mm;
+    margin-bottom: 3.2mm;
+  }
+  .app-setup-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3mm;
+    margin-bottom: 2.5mm;
+  }
+  .app-setup-title {
+    font-family: var(--font-serif);
+    font-size: 13pt;
+    font-size: 12.5pt;
+    font-weight: 400;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+  .app-setup-tag {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #FBBF24;
+    font-family: var(--font-mono);
+    font-size: 7pt;
+    font-size: 6.8pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .app-options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4mm;
+  }
+  .app-opt-card {
+    background: rgba(11, 15, 25, 0.7);
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    padding: 3.5mm 4mm;
+    padding: 3.2mm 3.8mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .app-opt-name {
+    font-size: 9.5pt;
+    font-size: 9.2pt;
+    font-weight: 700;
+    color: #F8FAFC;
+    margin-bottom: 1mm;
+    margin-bottom: 0.8mm;
+  }
+  .app-opt-desc {
+    font-size: 7.8pt;
+    font-size: 7.5pt;
+    color: var(--text-dim);
+    line-height: 1.35;
+    margin-bottom: 2.5mm;
+    margin-bottom: 2mm;
+  }
+  .app-opt-price-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 2.2mm;
+    padding-top: 2mm;
+  }
+  .app-opt-price-val {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .app-opt-price-val strong {
+    font-family: var(--font-sans);
+    font-size: 14pt;
+    font-size: 13.5pt;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+  .app-opt-price-val span {
+    font-size: 7.2pt;
+    font-size: 7pt;
+    color: var(--text-muted);
+  }
+  .app-badge-pill {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    font-family: var(--font-mono);
+    font-size: 6.8pt;
+    font-size: 6.5pt;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Included Services Strip */
+  .included-box {
+    background: rgba(15, 20, 32, 0.65);
+    border: 1px dashed var(--border-light);
+    border-radius: 9px;
+    padding: 3mm 4mm;
+    margin-bottom: 4.5mm;
+    padding: 2.8mm 4mm;
+    margin-bottom: 3.2mm;
+  }
+  .inc-title {
+    font-size: 7.8pt;
+    font-size: 7.5pt;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: #E2E8F0;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 2mm;
+    margin-bottom: 1.8mm;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .inc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2mm;
+    gap: 1.8mm;
+  }
+  .inc-item {
+    font-size: 7.6pt;
+    font-size: 7.4pt;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .inc-item svg {
+    width: 12px;
+    height: 12px;
+    width: 11px;
+    height: 11px;
+    color: var(--primary-bright);
+    flex-shrink: 0;
+  }
+
+  /* Final CTA / Contact Footer */
+  .contact-footer-card {
+    background: linear-gradient(135deg, #162032 0%, #0C121D 100%);
+    border: 1px solid #29384E;
+    border-radius: 11px;
+    padding: 4mm 5mm;
+    padding: 3.5mm 5mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .contact-cta {
+    max-width: 60%;
+  }
+  .cta-heading {
+    font-family: var(--font-serif);
+    font-size: 13pt;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-bottom: 1mm;
+    letter-spacing: -0.01em;
+  }
+  .cta-sub {
+    font-size: 7.8pt;
+    color: var(--text-dim);
+    line-height: 1.35;
+  }
+  .contact-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 8pt;
+  }
+  .c-team {
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 9pt;
+  }
+  .c-phone {
+    font-weight: 700;
+    color: #38BDF8;
+    font-size: 9.5pt;
+  }
+  .c-email, .c-web {
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div>
+    <!-- Top Header -->
+    <div class="header">
+      <div class="logo-wrap">
+        <img class="logo-img" src="./assets/image-1.png" alt="Krudex Global">
+        <span class="brand-badge">INSTITUTIONAL EDITION</span>
+      </div>
+      <div class="header-meta">
+        <strong>Krudex Global Student Platform</strong>
+        Official School Solution Overview
+      </div>
+    </div>
+
+    <!-- Hero Block -->
+    <div class="hero-block">
+      <div>
+        <div class="hero-tag">Unified Campus Ecosystem</div>
+        <h1 class="hero-title">One App.<br><span>The Whole School Day.</span></h1>
+        <p class="hero-lead">
+          Connect your school office, teachers, and parents around every child’s daily journey. Replace fragmented WhatsApp groups, paper registers, and physical circulars with a single, enterprise-grade mobile platform.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">15+</span>
+            <span class="stat-lbl">Core Modules</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-lbl">Role Portals</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">100%</span>
+            <span class="stat-lbl">Verified Logins</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-lbl">Languages (EN/HI/TE)</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-preview">
+        <img class="hero-phone-img" src="./assets/image-2.png" alt="Krudex Student Mobile App">
+      </div>
+    </div>
+
+    <!-- 15 Features Grid Across 4 Pillars -->
+    <div class="section-head">
+      <h2 class="section-title">The Complete Institutional Suite</h2>
+      <span class="section-sub">15 INTEGRATED MODULES · LIVE FROM DAY ONE</span>
+    </div>
+
+    <div class="pillars-grid">
+      <!-- Pillar 1: Learning -->
+      <div class="pillar-card">
+        <div class="pillar-head">
+          <div class="pillar-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <span class="pillar-name">1. Academic & Learning</span>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Digital Class Diary:</strong> <span>Daily homework, attachments, lesson notes, and teacher ratings.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Smart Timetable:</strong> <span>Real-time period schedule with current teacher mapping.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Academic Calendar:</strong> <span>Holidays, exam timetables, sports days, and campus events.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Digital Report Cards:</strong> <span>Term results and GPA analytics released securely when ready.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 2: Communication -->
+      <div class="pillar-card">
+        <div class="pillar-head">
+          <div class="pillar-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </div>
+          <span class="pillar-name">2. Campus Communication</span>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Instant Announcements:</strong> <span>Broadcasts targeted to school, specific class, or one family.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Policy Repository:</strong> <span>Digital handbooks, dress codes, and campus regulations.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Private Media Gallery:</strong> <span>Safe classroom moments shared exclusively with verified parents.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Helpdesk & Concerns:</strong> <span>Parent queries logged, assigned, and tracked to closure with ratings.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 3: Attendance & Safety -->
+      <div class="pillar-card">
+        <div class="pillar-head">
+          <div class="pillar-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <span class="pillar-name">3. Attendance & Campus Safety</span>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>1-Tap Smart Attendance:</strong> <span>Instant morning absence notification sent to parents by 8:45 AM.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Online Leave Application:</strong> <span>Parents submit in app; approval auto-updates attendance registers.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Digital Gate Pass:</strong> <span>Pre-approved early exits verified securely at the gate by security staff.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Transport & Bus Tracking:</strong> <span>Live vehicle route, stop timings, and driver contact directory.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 4: School Services -->
+      <div class="pillar-card">
+        <div class="pillar-head">
+          <div class="pillar-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          </div>
+          <span class="pillar-name">4. School Services & Administration</span>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>In-App Fee Payments:</strong> <span>Direct UPI/Card payment gateway with automated digital fee receipts.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>School Store & Supplies:</strong> <span>Order uniforms, books, and merchandise with inventory management.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Student TC Management:</strong> <span>Paperless Transfer Certificate workflow with audit tracking.</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="f-bullet"></div>
+            <div class="f-text"><strong>Multi-Lingual Interface:</strong> <span>Complete menu navigation available in English, Hindi, and Telugu.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role-Based System Strip -->
+    <div class="roles-bar">
+      <div class="role-box">
+        <span class="role-badge">OFFICE</span>
+        <div class="role-desc">
+          <strong>Full Campus Visibility</strong>
+          Central oversight of fee collection, student records, and gate security.
+        </div>
+      </div>
+      <div class="role-box">
+        <span class="role-badge">TEACHERS</span>
+        <div class="role-desc">
+          <strong>Zero Paperwork Burden</strong>
+          Attendance in one tap, single homework broadcast, and automated cover.
+        </div>
+      </div>
+      <div class="role-box">
+        <span class="role-badge">PARENTS</span>
+        <div class="role-desc">
+          <strong>Real-Time Confidence</strong>
+          Know their child’s day as it happens without calling school reception.
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Trust Strip -->
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        <span>Zero Public Sign-Ups (School Issued)</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        <span>Complete School Data Isolation</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        <span>Encrypted Fee Gateway</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        <span>Native iOS & Android Apps</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 1 Bottom Footer -->
+  <div class="footer">
+    <div class="footer-left">
+      <span>Krudex Global Technologies</span>
+      <span>•</span>
+      <span>Enterprise School Solutions</span>
+    </div>
+    <div>Page 1 of 2 — Platform Specifications</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <div>
+    <!-- Top Header -->
+    <div class="header">
+      <div class="logo-wrap">
+        <img class="logo-img" src="./assets/image-1.png" alt="Krudex Global">
+        <span class="brand-badge">COMMERCIAL PROPOSAL</span>
+        <span class="brand-badge">COMMERCIAL PROPOSAL &bull; WITH GST</span>
+      </div>
+      <div class="header-meta">
+        <strong>Annual Institutional Pricing</strong>
+        Simple, Transparent & Scalable
+        Simple, Transparent & Scalable &bull; Incl. GST
+      </div>
+    </div>
+
+    <!-- Pricing Hero Heading -->
+    <div class="pricing-hero">
+      <h2>Institutional Pricing & Deployment</h2>
+      <p>All-inclusive pricing tailored to your school strength. No hidden maintenance charges, no surprise fees, and full feature availability from day one.</p>
+      <p>All-inclusive pricing tailored to your school strength. All quoted fees are inclusive of GST with zero hidden maintenance charges, surprise fees, or per-message costs.</p>
+    </div>
+
+    <!-- Subscription Plans Grid (Student & Staff) -->
+    <div class="plans-grid">
+      <!-- Student Card -->
+      <div class="plan-card">
+        <div class="plan-top">
+          <h3 class="plan-title">Student Annual License</h3>
+          <p class="plan-sub">Complete 360° access for students and both parents throughout the academic year.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <span class="currency">₹</span>
+          <span class="amount">1,000</span>
+          <span class="period">/ student / academic year</span>
+          <span class="amount">999</span>
+          <span class="period">/ student / academic year <span class="gst-tag">&bull; Incl. GST</span></span>
+        </div>
+        <div class="plan-features">
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Full 15-Feature Suite</strong> (Diary, Attendance, Exams, Fees, Bus, etc.)</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Dual Parent Logins:</strong> Mother & Father access with multi-child toggle</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Instant Absence SMS & Push Alerts</strong> every morning</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Secure In-App Fee Payments</strong> with automated GST receipts</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Digital Gate Pass & Safe Dismissal</strong> tracking</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Card -->
+      <div class="plan-card">
+        <div class="plan-top">
+          <h3 class="plan-title">Staff & Teacher License</h3>
+          <p class="plan-sub">For teachers, faculty, and coordinators. School administrative office is included free.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <span class="currency">₹</span>
+          <span class="amount">500</span>
+          <span class="period">/ staff member / year</span>
+          <span class="amount">499</span>
+          <span class="period">/ staff member / year <span class="gst-tag">&bull; Incl. GST</span></span>
+        </div>
+        <div class="plan-features">
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>School Admin Web Suite:</strong> Included 100% Free (Principal, office & accountants)</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>1-Tap Digital Register:</strong> Take whole-class attendance in under 30 seconds</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Homework & Notice Broadcast:</strong> Attach worksheets, PDFs, and instructions</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Leave Workflow & Timetable Cover:</strong> Paperless leave approvals</span>
+          </div>
+          <div class="p-feat-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            <span><strong>Parent Queries & Concerns Desk:</strong> Structured, confidential messaging</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Suite Included Free Highlight Banner -->
+    <div class="admin-included-banner">
+      <div class="aib-badge">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        ADMIN SUITE INCLUDED FREE
+      </div>
+      <div class="aib-content">
+        <strong>School Administration & Management: ₹0 (Zero Extra License Fee)</strong>
+        — Complete Web Admin Console, Principal Dashboard, Fee & Accounts Management, and Gate Security Desk are included with unlimited administrative logins at no additional cost.
+      </div>
+    </div>
+
+    <!-- Mobile App Deployment Tier (One-time Setup) -->
+    <div class="app-setup-section">
+      <div class="app-setup-head">
+        <div class="app-setup-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38BDF8" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          Mobile App Store & Play Store Publishing Options
+        </div>
+        <span class="app-setup-tag">ONE-TIME LIFETIME SETUP</span>
+      </div>
+
+      <div class="app-options-grid">
+        <!-- Option 1: Krudex App -->
+        <div class="app-opt-card">
+          <div>
+            <div class="app-opt-name">Krudex Global Standard App</div>
+            <p class="app-opt-desc">
+              Your school is hosted directly within the official Krudex Global app. Parents and staff download Krudex Global from the App Store or Google Play, enter their school code, and see your customized school branding.
+            </p>
+          </div>
+          <div class="app-opt-price-box">
+            <div class="app-opt-price-val">
+              <strong>₹15,000</strong>
+              <span>One-Time / Lifetime</span>
+              <strong>₹14,999</strong>
+              <span>One-Time / Lifetime (Incl. GST)</span>
+            </div>
+            <span class="app-badge-pill">TURNKEY</span>
+          </div>
+        </div>
+
+        <!-- Option 2: White Label School App -->
+        <div class="app-opt-card" style="border-color: rgba(59, 130, 246, 0.45); background: rgba(30, 58, 138, 0.2);">
+          <div>
+            <div class="app-opt-name" style="color:#93C5FD">Dedicated School-Branded App</div>
+            <p class="app-opt-desc">
+              Published on the Apple App Store and Google Play Store under <strong>Your School’s Own Name</strong> (e.g. <em>"St. Xavier’s High School App"</em>) with your official school logo, icon, and splash screen.
+            </p>
+          </div>
+          <div class="app-opt-price-box">
+            <div class="app-opt-price-val">
+              <strong style="color:#93C5FD">₹25,000</strong>
+              <span>One-Time / Lifetime</span>
+              <strong style="color:#93C5FD">₹24,999</strong>
+              <span>One-Time / Lifetime (Incl. GST)</span>
+            </div>
+            <span class="app-badge-pill" style="background:rgba(59,130,246,0.25); color:#93C5FD">WHITE-LABEL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's Included Free -->
+    <div class="included-box">
+      <div class="inc-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Included in Every Institutional Plan at Zero Extra Cost
+      </div>
+      <div class="inc-grid">
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span><strong>School Admin Web Suite</strong> (Unlimited office & principal logins)</span>
+        </div>
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span>Staff & teacher live training sessions</span>
+        </div>
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span>Dedicated local support team (Hyderabad)</span>
+        </div>
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span>Free parent onboarding guides & videos</span>
+        </div>
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span>Continuous cloud server maintenance</span>
+        </div>
+        <div class="inc-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          <span>Automatic feature upgrades & patches</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact & Next Steps Box -->
+    <div class="contact-footer-card">
+      <div class="contact-cta">
+        <div class="cta-heading">Ready to Modernize Your Campus?</div>
+        <p class="cta-sub">
+          Schedule a live 20-minute demonstration or request a tailored proposal based on your exact student strength. We assist your team at every step from data onboarding to launch.
+        </p>
+      </div>
+      <div class="contact-meta">
+        <span class="c-team">Krudex Solutions Team</span>
+        <span class="c-phone">+91 72073 63444</span>
+        <span class="c-email">krudextechnologies@gmail.com</span>
+        <span class="c-web">www.krudex.in</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 2 Bottom Footer -->
+  <div class="footer">
+    <div class="footer-left">
+      <span>Krudex Global</span>
+      <span>•</span>
+      <span>Hyderabad, Telangana, India</span>
+      <span>•</span>
+      <span>krudex.in</span>
+    </div>
+    <div>Page 2 of 2 — Commercial Terms</div>
+    <div>Page 2 of 2 — Commercial Terms (All Prices Inclusive of GST)</div>
+  </div>
+</div>
+
+</body>
+</html>
+`;
+
+// Write HTML
+const htmlPath = path.join('C:/projects/kru-glo-pitch', 'pricing-brochure.html');
+fs.writeFileSync(htmlPath, htmlContent, 'utf8');
+
+// Render PDF and preview images with Playwright
+(async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const page = await browser.newPage({ viewport: { width: 1200, height: 1697 } });
+
+  await page.goto('file:///' + htmlPath.replace(/\\\\/g, '/'), { waitUntil: 'networkidle' });
+
+  const pdfPath = path.join('C:/projects/kru-glo-pitch', 'Krudex-Global-School-Pricing-Brochure.pdf');
+  await page.pdf({
+    path: pdfPath,
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+    preferCSSPageSize: true
+  });
+  console.log('PDF regenerated successfully.');
+
+  const pages = await page.$$('.page');
+  for (let i = 0; i < pages.length; i++) {
+    await pages[i].screenshot({ path: `C:/projects/kru-glo-pitch/page-${i + 1}.png` });
+  }
+  console.log('Page previews regenerated.');
+
+  await browser.close();
+})();
